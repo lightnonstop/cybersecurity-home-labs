@@ -2,7 +2,7 @@
 
 | Field        | Value |
 |---|---|
-| Date         | 30-07-2024
+| Date         | 16-05-2026
 | Platform     | malware-traffic-analysis.net
 | Category     | PCAP Analysis
 | Difficulty   | Easy
