@@ -61,7 +61,7 @@ Action:
 Statistics → Protocol Hierarchy
 ```
 
-![protocol hierarchy](./assets/2024-07-30_protocol-hierarchy.png)
+![protocol hierarchy](../assets/2024-07-30_protocol-hierarchy.png)
 
 Interpretation: 
 
@@ -83,7 +83,7 @@ nbns or dhcp
 Findings:
 - hostname DESKTOP-SKBR25F, IP 172.16.1.66, MAC 00:1e:64:ec:f3:08
 
-![Victim host details identified](./assets/2024-07-30_victim-host-identified.png)
+![Victim host details identified](../assets/2024-07-30_victim-host-identified.png)
 
 ---
 
@@ -97,7 +97,7 @@ ldap contains "CN=Users"
 ```
 I found CN=Clark Collier in the LDAP search request to the DC
 
-![User full name found](./assets/2024-07-30_ldap-serach-request.png)
+![User full name found](../assets/2024-07-30_ldap-serach-request.png)
 
 Interpretation: 
 
@@ -112,7 +112,7 @@ Filter used:
 (http.request or tls.handshake.type eq 1) and !(ssdp)
 ```
 
-![Suspicious traffic to file sharing domains](./assets/2024-07-30_github-maven-checks-.png)
+![Suspicious traffic to file sharing domains](../assets/2024-07-30_github-maven-checks-.png)
 
 What I found:
 TLS connection to github.com, objects.githubusercontent.com, repo1.maven.org all on port 443
@@ -128,7 +128,7 @@ Filter used:
 ```
 http.request
 ```
-![IP address check by victim host machine](./assets/2024-07-30_ip-api-checks-.png)
+![IP address check by victim host machine](../assets/2024-07-30_ip-api-checks-.png)
 
 What I found: GET /json/ to ip-api.com on port 80
 
@@ -148,7 +148,7 @@ ping|STRRAT|1BE8292C|DESKTOP-SKBR25F|ccollier|Microsoft Windows 11 Pro|64-bit|Wi
 Interpretation:
 This is a communication to a C2 server. The pipe-delimited format is proprietarty for STRRAT. It reports the victim host's details - OS version, Antiviru Status (Windows Defender present), antivirus product (Not installed = no third party Antivirus), Java version. The regular 5 seconds interval confirms automated beaconing.
 
-![TCP Stream of C2 beaconing](./assets/2024-07-30_report-C2-tcp-stream.png)
+![TCP Stream of C2 beaconing](../assets/2024-07-30_report-C2-tcp-stream.png)
 
 ## Timeline of Events
 
