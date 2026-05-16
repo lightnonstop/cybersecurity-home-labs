@@ -1,4 +1,4 @@
-# STRRAT (STR Remote Access Trojan) malware incident report — 30-07-2024
+# STRRAT (STR Remote Access Trojan) malware PCAP Analysis
 
 | Field        | Value |
 |---|---|
