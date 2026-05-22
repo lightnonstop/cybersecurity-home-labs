@@ -39,5 +39,5 @@ ATT&CK technique IDs are mapped in every writeup.
 
 ---
 
-## Lab Count: 3
-*Last updated: 19-05-2026*
+## Lab Count: 4
+*Last updated: 22-05-2026*
