@@ -34,6 +34,6 @@ echo "[*] Running windows.filescan..."
 $VOL -f "$DUMP" windows.filescan | tee "$OUTDIR/filescan.txt"
 
 echo "[*] Running windows.malfind..."
-$VOL -f "$DUMP" windows.malfind | tee "$OUTDIR/malfind.txt"
+$VOL -f "$DUMP" windows.malware.malfind | tee "$OUTDIR/malfind.txt"
 
 echo "[+] All plugins complete. Output saved to $OUTDIR/"
