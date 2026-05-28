@@ -6,7 +6,7 @@
 
 DUMP=$1
 OUTDIR=$2
-VOL="python3 ~/volatility3/vol.py"
+VOL="python3 $HOME/volatility3/vol.py"
 
 mkdir -p "$OUTDIR"
 
