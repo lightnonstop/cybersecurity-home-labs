@@ -41,7 +41,7 @@ I started with DNS enumeration to determine how flaws.cloud is hosted.
 host flaws.cloud
 ```
 
-![host flaws.cloud](../assets/flaws.cloud/2026-05-21_l1-host-flaws-cloud.png)
+![host flaws.cloud](../../assets/flaws-cloud/2026-05-21_l1-host-flaws-cloud.png)
 
 This returned eight IP addresses. I ran a reverse lookup on one of them
 to confirm the hosting infrastructure.
@@ -50,7 +50,7 @@ to confirm the hosting infrastructure.
 nslookup 52.92.146.211
 ```
 
-![nslookup confirms S3](../assets/flaws.cloud/2026-05-21_l1-nslookup-s3-confirm.png)
+![nslookup confirms S3](../../assets/flaws-cloud/2026-05-21_l1-nslookup-s3-confirm.png)
 
 The reverse lookup returned `s3-website-us-west-2.amazonaws.com`,
 confirming that `flaws.cloud` is hosted as an S3 static website in the
@@ -135,7 +135,7 @@ aws s3 sync s3://level3-9afd3927f195e10225021a578e6f78df.flaws.cloud/ \
   . --no-sign-request --region us-west-2
 ```
 
-![bucket sync with git folder](../assets/flaws.cloud/2026-05-21_l3-bucket-sync-git-folder.png)
+![bucket sync with git folder](../../assets/flaws-cloud/2026-05-21_l3-bucket-sync-git-folder.png)
 
 The download confirmed the `.git` folder was present. I ran `git log`
 to inspect the commit history:
@@ -144,7 +144,7 @@ to inspect the commit history:
 git log
 ```
 
-![git log two commits](../assets/flaws.cloud/2026-05-21_l3-git-log-commits.png)
+![git log two commits](../../assets/flaws-cloud/2026-05-21_l3-git-log-commits.png)
 
 Two commits were present. The most recent carried the message *"Oops,
 accidentally added something I shouldn't have"*, a clear signal that
@@ -155,7 +155,7 @@ older commit first to see what it contained before the removal:
 git checkout b64c8dcfa8a39af06521cf4cb7cdce5f0ca9e526
 ```
 
-![checkout oops commit](../assets/flaws.cloud/2026-05-21_l3-git-checkout-oops-commit.png)
+![checkout oops commit](../../assets/flaws-cloud/2026-05-21_l3-git-checkout-oops-commit.png)
 
 No new files appeared. I then checked out the very first commit:
 
@@ -163,7 +163,7 @@ No new files appeared. I then checked out the very first commit:
 git checkout f52ec03b227ea6094b04e43f475fb0126edb5a61
 ```
 
-![checkout first commit reveals access_keys](../assets/flaws.cloud/2026-05-21_l3-git-checkout-first-commit-access-keys.png)
+![checkout first commit reveals access_keys](../../assets/flaws-cloud/2026-05-21_l3-git-checkout-first-commit-access-keys.png)
 
 Listing the files now showed `access_keys.txt`, a file that had been
 added in the first commit and removed in the second, but which Git
@@ -173,7 +173,7 @@ preserved in full. Reading it:
 cat access_keys.txt
 ```
 
-![access keys plaintext](../assets/flaws.cloud/2026-05-21_l3-cat-access-keys.png)
+![access keys plaintext](../../assets/flaws-cloud/2026-05-21_l3-cat-access-keys.png)
 
 The file contained a plaintext AWS Access Key ID and Secret Access Key.
 I configured a new AWS CLI profile with these credentials:
@@ -182,7 +182,7 @@ I configured a new AWS CLI profile with these credentials:
 aws configure --profile user1
 ```
 
-![configure profile user1](../assets/flaws.cloud/2026-05-21_l3-configure-profile-user1.png)
+![configure profile user1](../../assets/flaws-cloud/2026-05-21_l3-configure-profile-user1.png)
 
 I verified who the keys belonged to:
 
@@ -190,7 +190,7 @@ I verified who the keys belonged to:
 aws --profile user1 sts get-caller-identity
 ```
 
-![sts get-caller-identity backup user](../assets/flaws.cloud/2026-05-21_l3-sts-caller-identity-backup.png)
+![sts get-caller-identity backup user](../../assets/flaws-cloud/2026-05-21_l3-sts-caller-identity-backup.png)
 
 The keys belonged to an IAM user named `backup` in account
 `975426262029`. With these credentials I could now list all S3 buckets
@@ -233,7 +233,7 @@ aws --profile user1 ec2 describe-snapshots \
   --owner-id 975426262029 --region us-west-2
 ```
 
-![describe-snapshots](../assets/flaws.cloud/2026-05-21_l4-describe-snapshots.png)
+![describe-snapshots](../../assets/flaws-cloud/2026-05-21_l4-describe-snapshots.png)
 
 This returned one snapshot: `snap-0b49342abd1bdcb89`, tagged *"flaws
 backup 2017.02.27"*, 8GB in size, with `"Encrypted": false`. The
@@ -279,7 +279,7 @@ curl http://4d0cf09b9b2d761a7d87be99d17507bce8b86f3b.flaws.cloud\
 /proxy/169.254.169.254/latest/meta-data/iam/security-credentials/flaws
 ```
 
-![IMDS credentials returned](../assets/flaws.cloud/2026-05-21_l5-imds-credentials-returned.png)
+![IMDS credentials returned](../../assets/flaws-cloud/2026-05-21_l5-imds-credentials-returned.png)
 
 The response returned a complete set of temporary AWS credentials for
 the `flaws` IAM role: an `AccessKeyId` beginning with `ASIA`, a
@@ -295,7 +295,7 @@ aws --profile user2 s3 ls \
   level6-cc4c404a8a8b876167f5e70a7d8c9880.flaws.cloud
 ```
 
-![list level6 bucket](../assets/flaws.cloud/2026-05-21_l5-list-level6-bucket.png)
+![list level6 bucket](../../assets/flaws-cloud/2026-05-21_l5-list-level6-bucket.png)
 
 The bucket listing returned a subdirectory `ddcc78ff/` and `index.html`.
 Navigating to the Level 6 bucket URL with the `ddcc78ff/` path revealed
@@ -347,7 +347,7 @@ The response confirmed the username is `Level6` under account
 aws --profile user3 iam list-attached-user-policies --user-name Level6
 ```
 
-![IAM enumeration Level6 policies](../assets/flaws.cloud/2026-05-21_l6-iam-enum-level6-policies.png)
+![IAM enumeration Level6 policies](../../assets/flaws-cloud/2026-05-21_l6-iam-enum-level6-policies.png)
 
 Two policies were attached: `MySecurityAudit` and `list_apigateways`.
 The SecurityAudit policy allows reading Lambda function configurations,
@@ -365,7 +365,7 @@ aws --region us-west-2 --profile user3 \
   lambda get-policy --function-name Level6
 ```
 
-![lambda get-policy](../assets/flaws.cloud/2026-05-21_l6-lambda-get-policy.png)
+![lambda get-policy](../../assets/flaws-cloud/2026-05-21_l6-lambda-get-policy.png)
 
 The policy showed the function could be invoked through API Gateway
 using the ARN `arn:aws:execute-api:us-west-2:975426262029:s33ppypa75/*/GET/level6`.
@@ -376,7 +376,7 @@ aws --profile user3 --region us-west-2 \
   apigateway get-stages --rest-api-id "s33ppypa75"
 ```
 
-![apigateway get-stages Prod](../assets/flaws.cloud/2026-05-21_l6-apigateway-get-stages.png)
+![apigateway get-stages Prod](../../assets/flaws-cloud/2026-05-21_l6-apigateway-get-stages.png)
 
 The stage name is `Prod`. Combining the REST API ID, region, stage, and
 resource path builds the invocation URL:
@@ -384,7 +384,7 @@ resource path builds the invocation URL:
 
 Navigating to this URL in a browser returned:
 
-![final URL theend](../assets/flaws.cloud/2026-05-21_l6-final-url-theend.png)
+![final URL theend](../../assets/flaws-cloud/2026-05-21_l6-final-url-theend.png)
 
 Challenge complete.
 

