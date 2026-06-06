@@ -203,7 +203,7 @@ Attacker was able to establish persistence on the Apache web server in order to 
 ## Indicators of Compromise (IOCs)
 
 | Type | Value | Context |
-|---|---|---|---|
+|---|---|---|
 | IP | `14.0.0.120` | Scanning Machine or attacker host |
 | IP | `10.0.0.112` | Compromised host |
 | File | `JXQOZY.war` | Malicious file uploaded to establish a reverse shell |
